@@ -1,0 +1,86 @@
+---
+import Layout from "../layouts/Layout.astro";
+import { db } from "../lib/db";
+import DashboardComponent from "../components/Dashboard.jsx";
+import { Upload } from "lucide-react";
+
+const user = Astro.locals.user;
+if (!user) return Astro.redirect("/");
+
+const url = new URL(Astro.url);
+const page = parseInt(url.searchParams.get("page") || "1");
+const limit = 12;
+const offset = (page - 1) * limit;
+
+let query = "";
+let countQuery = "";
+let args = [];
+
+if (user.role === "admin") {
+    query = "SELECT * FROM lessons ORDER BY updated_at DESC LIMIT ? OFFSET ?";
+    countQuery = "SELECT COUNT(*) as total FROM lessons";
+    args = [limit, offset];
+} else {
+    query =
+        "SELECT * FROM lessons WHERE user_id = ? ORDER BY updated_at DESC LIMIT ? OFFSET ?";
+    countQuery = "SELECT COUNT(*) as total FROM lessons WHERE user_id = ?";
+    args = [user.id, limit, offset];
+}
+
+const result = await db.execute({ sql: query, args });
+const countResult = await db.execute({
+    sql: countQuery,
+    args: user.role === "admin" ? [] : [user.id],
+});
+
+const totalLessons = Number(countResult.rows[0].total);
+const totalPages = Math.ceil(totalLessons / limit);
+
+const groupedArray = [];
+const categoryMap = new Map();
+
+result.rows.forEach((lesson) => {
+    const cat = lesson.category || "Uncategorized";
+    if (!categoryMap.has(cat)) {
+        const newCatGroup = { name: cat, items: [] };
+        categoryMap.set(cat, newCatGroup);
+        groupedArray.push(newCatGroup); // Pushes them in order of discovery
+    }
+    categoryMap.get(cat).items.push(lesson);
+});
+
+const collapsedCookie = Astro.cookies.get("renitor_collapsed_cats")?.value;
+const initialCollapsed = collapsedCookie ? JSON.parse(collapsedCookie) : [];
+
+let allUsers = [];
+if (user.role === "admin") {
+    const userRes = await db.execute(
+        "SELECT id, username FROM users ORDER BY username ASC",
+    );
+    allUsers = userRes.rows;
+}
+---
+
+<Layout title="Dashboard">
+    <div class="p-8 max-w-4xl mx-auto bg-white">
+        <div class="flex justify-between items-center mb-6">
+            <h1 class="text-2xl font-bold">Saved Curriculum</h1>
+            <a
+                href="/app"
+                class="bg-amber-600 text-white! font-bold uppercase px-4 py-2 hover:bg-amber-700 transition flex gap-2"
+            >
+                Upload <Upload size={24} />
+            </a>
+        </div>
+
+        <DashboardComponent
+            client:load
+            initialGroupedArray={groupedArray}
+            initialCollapsed={initialCollapsed}
+            currentPage={page}
+            totalPages={totalPages}
+            allUsers={allUsers}
+            currentUser={user}
+        />
+    </div>
+</Layout>

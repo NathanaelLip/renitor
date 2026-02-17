@@ -1,0 +1,55 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import Editor from "../../components/Editor.jsx";
+import { db } from "../../lib/db";
+
+const { id } = Astro.params;
+const user = Astro.locals.user;
+
+if (!user) {
+    return Astro.redirect("/");
+}
+
+let initialData = {
+    sections: [],
+    title: "New Lesson",
+    category: "Uncategorized",
+};
+
+// 1. Fetch current lesson data
+if (id) {
+    const result = await db.execute({
+        sql: "SELECT * FROM lessons WHERE id = ?",
+        args: [id],
+    });
+
+    if (result.rows.length > 0) {
+        const lesson = result.rows[0];
+        initialData = {
+            sections: JSON.parse(lesson.sections as string),
+            title: lesson.title,
+            category: (lesson.category as string) || "Uncategorized",
+        };
+    }
+}
+
+// 2. Fetch all categories for suggestions
+const categoryResult = await db.execute({
+    sql: "SELECT DISTINCT category FROM lessons WHERE user_id = ? AND category IS NOT NULL",
+    args: [user.id],
+});
+
+const existingCategories =
+    categoryResult.rows.map((row) => row.category as string) || [];
+---
+
+<Layout title="Renitor">
+    <Editor
+        client:load
+        initialId={id}
+        initialSections={initialData.sections}
+        initialTitle={initialData.title}
+        initialCategory={initialData.category}
+        existingCategories={existingCategories}
+    />
+</Layout>

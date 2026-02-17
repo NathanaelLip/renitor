@@ -1,0 +1,34 @@
+services:
+  db:
+    image: ghcr.io/tursodatabase/libsql-server:latest
+    container_name: renitor-sqld
+    ports:
+      - "8080:8080"
+      - "5001:5001"
+    volumes:
+      - ./libsql_data:/var/lib/sqld
+    environment:
+      - SQLD_NODE=primary
+    networks:
+      - renitor-network
+
+  app:
+    build: .
+    container_name: renitor
+    depends_on:
+      - db
+    environment:
+      - DATABASE_URL=http://db:8080
+      - HOST=0.0.0.0
+      - PORT=4321
+    ports:
+      - "4321:4321"
+    networks:
+      - renitor-network
+
+volumes:
+  libsql_data:
+
+networks:
+  renitor-network:
+    driver: bridge

@@ -1,0 +1,36 @@
+---
+import "../styles/global.css";
+---
+
+<html lang="en">
+    <head>
+        <meta charset="utf-8" />
+        <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+        <link rel="icon" href="/favicon.ico" />
+        <meta name="viewport" content="width=device-width" />
+        <meta name="generator" content={Astro.generator} />
+        <title>Renitor</title>
+    </head>
+    <body class="bg-neutral-300 dark:bg-neutral-800 min-h-screen">
+        <main>
+            <slot />
+        </main>
+    </body>
+</html>
+
+<style is:global>
+    /* Ensure the TipTap editor doesn't show a ring when focused */
+    .ProseMirror:focus {
+        outline: none;
+    }
+
+    /* Standardizing print dimensions for the 'Paper' */
+    @media print {
+        body {
+            background: white !important;
+        }
+        .no-print {
+            display: none !important;
+        }
+    }
+</style>

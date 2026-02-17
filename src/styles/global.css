@@ -1,0 +1,116 @@
+@import "tailwindcss";
+
+/* Base Styles */
+:root {
+    --paper-width: 210mm; /* A4 Width */
+    /*--bg-editor: #f3f4f6;*/
+}
+
+body {
+    /*background-color: var(--bg-editor);*/
+    font-family: "Inter", system-ui, sans-serif;
+}
+
+/* The "Paper" Container */
+.renitor {
+    background: white;
+    width: 100%;
+    margin: 0 auto;
+    min-height: 297mm; /* A4 Height */
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.tiptap ul,
+.tiptap ol,
+.tiptap ul li ul,
+.tiptap ol li ol {
+    padding: 0 1rem;
+    margin: 0;
+    list-style-type: disc;
+    line-height: 1.333;
+}
+
+.tiptap a {
+    text-decoration: underline;
+    color: oklch(66.6% 0.179 58.318);
+}
+
+/* PRINT LOGIC */
+@media print {
+    @page {
+        margin: 8mm;
+    }
+
+    body {
+        background: white !important;
+    }
+
+    .no-print,
+    .no-print *,
+    button,
+    .drag-handle {
+        display: none !important;
+    }
+
+    .renitor {
+        box-shadow: none !important;
+        padding: 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+    }
+
+    .shadow-sm {
+        box-shadow: none !important;
+    }
+
+    textarea {
+        border: none !important;
+        resize: none !important;
+        height: auto !important;
+        overflow: visible !important;
+    }
+
+    * {
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+    }
+
+    .group {
+        border: none !important;
+        /*margin-bottom: 2rem !important;*/
+        page-break-inside: auto;
+        display: flex !important;
+    }
+
+    .normal .p-4 {
+        padding: 0 0 0 1rem !important;
+    }
+
+    /* Hide empty paragraphs that immediately follow an unordered or ordered list */
+    .tiptap ul + p:empty,
+    .tiptap ol + p:empty {
+        display: none;
+    }
+
+    /* If TipTap is inserting a paragraph with a break <br> */
+    .tiptap ul + p:has(br:only-child),
+    .tiptap ol + p:has(br:only-child) {
+        display: none;
+    }
+
+    .title div .colorbar,
+    .three div div .colorbar,
+    .three div .colorbar,
+    .bar .colorbar {
+        display: none;
+    }
+}
+
+.title-editor .ProseMirror p {
+    margin: 0 !important;
+    display: inline;
+}
+
+.title-editor .ProseMirror:hover {
+    cursor: text;
+}
