@@ -118,7 +118,7 @@ export default function Section({
         ${isTitleBar ? "bar bg-neutral-600 text-center h-full py-2!" : ""}
         ${isTopThree ? "bg-neutral-200 text-center h-full" : ""}
 
-        ${isTitleOnly || isTopThree || isTitleBar ? "border-none py-4" : "border border-gray-100 flex shadow-sm hover:shadow-md"}
+        ${isTitleOnly || isTopThree || isTitleBar ? "border-none pb-4" : "border border-gray-100 flex shadow-sm hover:shadow-md"}
         group relative transition-all
       `}
     >

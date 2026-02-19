@@ -179,7 +179,7 @@ export default function Editor({
     );
 
   return (
-    <div className="max-w-5xl mx-auto py-8">
+    <div className="print-padding max-w-5xl mx-auto py-8">
       {sections.length === 0 && !initialId ? (
         <div className="no-print bg-white p-12 shadow-xl border border-gray-100">
           <div className="text-center mb-8">
