@@ -179,7 +179,7 @@ export default function Editor({
     );
 
   return (
-    <div className="print-padding max-w-5xl mx-auto py-8">
+    <div className="print-padding max-w-full lg:max-w-5xl mx-auto py-8">
       {sections.length === 0 && !initialId ? (
         <div className="no-print bg-white p-12 shadow-xl border border-gray-100">
           <div className="text-center mb-8">
@@ -194,7 +194,7 @@ export default function Editor({
         </div>
       ) : (
         <div className="animate-in fade-in duration-100">
-          <header className="no-print sticky top-4 z-50 mb-8 flex justify-between items-center bg-white/90 backdrop-blur-xs p-4 border border-gray-200 shadow-lg">
+          <header className="no-print sticky top-4 z-50 mb-8 flex flex-wrap justify-between items-center bg-white/90 backdrop-blur-xs p-4 border border-gray-200 shadow-lg">
             <div className="flex items-center gap-3">
               <div className="bg-amber-600 p-2 text-white">
                 <a href="/dashboard" className="text-white">
@@ -216,7 +216,7 @@ export default function Editor({
               </div>
             </div>
 
-            <div className="flex items-center gap-4">
+            <div className="flex flex-wrap items-center gap-4">
               {/* Category Input */}
               <div className="flex items-center gap-2 border border-gray-200 bg-white px-3 py-1.5 focus-within:ring-2 focus-within:ring-amber-500 transition-all">
                 <Folder size={16} className="text-gray-400" />
@@ -262,7 +262,7 @@ export default function Editor({
             collisionDetection={closestCenter}
             onDragEnd={handleDragEnd}
           >
-            <div className="renitor bg-white p-24 mx-auto min-h-[297mm]">
+            <div className="renitor bg-white p-8 md:p-24 mx-auto min-h-[259mm]">
               {/* SPECIAL HEADER GRID (First 4 Sections) */}
               {isModular && headerSections.length > 0 && (
                 <div className="grid grid-cols-2 gap-4 mb-8">

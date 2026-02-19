@@ -118,7 +118,7 @@ export default function Section({
         ${isTitleBar ? "bar bg-neutral-600 text-center h-full py-2!" : ""}
         ${isTopThree ? "bg-neutral-200 text-center h-full" : ""}
 
-        ${isTitleOnly || isTopThree || isTitleBar ? "border-none pb-4" : "border border-gray-100 flex shadow-sm hover:shadow-md"}
+        ${isTitleOnly || isTopThree || isTitleBar ? "border-none pb-4" : "z-auto! border border-gray-100 flex shadow-sm hover:shadow-md"}
         group relative transition-all
       `}
     >
@@ -159,7 +159,7 @@ export default function Section({
 
       {/* THE COLOR BAR */}
       <div
-        className="colorbar w-4 shrink-0 relative cursor-pointer group/bar"
+        className="colorbar z-auto w-4 shrink-0 relative cursor-pointer group/bar"
         style={{ backgroundColor: section.color || "#e2e8f0" }}
         onClick={() => setShowPalette(!showPalette)}
       >
@@ -186,7 +186,7 @@ export default function Section({
                 </button>
               </div>
 
-              <div className="grid grid-cols-auto grid-flow-col gap-4">
+              <div className="grid grid-rows-7 md:grid-rows-3 grid-flow-col gap-4">
                 {PRESET_COLORS.map((color) => (
                   <button
                     key={color.value}
